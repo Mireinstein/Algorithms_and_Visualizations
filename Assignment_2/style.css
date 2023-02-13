@@ -1,7 +1,8 @@
 
 
 /* 800px body with different color for background and adaptable screen*/
-body {
+body>main{
+    margin-top: 105px;
     width: 800px;
     background-color: white;
   }
@@ -9,13 +10,20 @@ body {
   @media (min-width: 800px) {
     body{
       margin: auto;
+      background-color: rgb(134, 130, 134);
+    }
+    body>main{
+      margin-top: 105px;
+      width: 800px;
+      background-color: white;
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+    body>header{
+      background-color: white;
     }
   }
-  
-  body {
-    margin-top: 105px;
-    background-color: rgb(134, 130, 134);
-  }
+
 
  /* fixing the header to a fixed position*/ 
  header {
@@ -35,13 +43,12 @@ body {
     height: 100px;
     text-align: center;
     margin-bottom: 0px;
+    padding-bottom: 0px;
     }
     
    /* The three navigation bar elements must have equal widths, and 
    the text within each navigation bar element should be centered*/    
-    header{
-        background-color: rgb(211, 211, 130);
-    }
+   
     header>nav>ul>li {
         display: inline-block;
         width: 30%; /* 100% / 3 items */
@@ -50,6 +57,11 @@ body {
         text-decoration: none;
         border-radius:15px;
         background-color: lightgray;
+    }
+
+    header>nav>ul{
+      margin-top: 0px;
+      padding-top: 0px;
     }
     
     /*making links reactive*/
