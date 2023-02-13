@@ -1,1 +1,86 @@
 
+
+/* 800px body with different color for background and adaptable screen*/
+body {
+    width: 800px;
+    background-color: white;
+  }
+  
+  @media (min-width: 800px) {
+    body>main {
+      margin: auto;
+    }
+  }
+  
+  body {
+    background-color: rgb(134, 130, 134);
+  }
+
+ /* fixing the header to a fixed position*/ 
+ header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+  }
+
+  main {
+    padding-top: 80px;
+  }
+
+   /* centering head titles*/ 
+   header>h1{
+    height: 100px;
+    text-align: center;
+    }
+    
+   /* The three navigation bar elements must have equal widths, and 
+   the text within each navigation bar element should be centered*/    
+    header{
+        background-color: rgb(211, 211, 130);
+    }
+    header>nav>ul>li {
+        display: inline-block;
+        width: 30%; /* 100% / 3 items */
+        text-align: center; /* Center the text within each list item */
+        padding: 0;
+        text-decoration: none;
+        border-radius:15px;
+        background-color: lightgray;
+    }
+    
+    /*making links reactive*/
+    a:hover {
+        color: green;
+    }
+
+    a{
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        font-family:Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    header>nav>ul>li  a:visited {
+        text-decoration-color: green;
+    }
+
+
+     /*projects side by side*/
+     .project {
+        display: flex;
+      }
+      .project article {
+        width: 50%;
+      }
+      .project aside{
+        width: 50%;
+        padding: 0 10px;
+      }
+ 
+
+
+
+
+
