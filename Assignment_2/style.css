@@ -3,8 +3,14 @@
 /* 800px body with different color for background and adaptable screen*/
 body>main{
     margin-top: 105px;
-    width: 800px;
+    width: 600px;
     background-color: white;
+    align-self: center;
+    margin-left: 100px;
+    margin-right: 100px;
+    border-radius: 15px;
+    padding-left:20px ;
+    padding-right: 20px;
   }
   
   @media (min-width: 800px) {
@@ -16,8 +22,6 @@ body>main{
       margin-top: 105px;
       width: 800px;
       background-color: white;
-      margin-left: 100px;
-      margin-right: 100px;
     }
     body>header{
       background-color: white;
@@ -95,6 +99,30 @@ body>main{
         width: 50%;
         padding: 0 10px;
       }
+     
+      /*centering the website*/
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+        
+      .nav-link {
+        color: purple;
+        text-decoration: none;
+        background-color:white;
+        text-decoration-line:overline;
+
+      }
+      
+      .nav-item .nav-link.active {
+        color: #fff;
+        background-color: #333;
+      }
+
+
+
 
      
  
