@@ -25,10 +25,15 @@ function drawTiles(){
 
                // add event listeners to change background color on mouseover and mouseout
             cell.addEventListener("mouseover", function() {
-                cell.style.backgroundColor = "rgb(0,0,0)";
+                cell.style.backgroundColor = "rgb(255,0,0)";
             });
             cell.addEventListener("mouseout", function() {
                 cell.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+            });
+             //event listener to change cells permanently on click
+            cell.addEventListener("click", function() {
+                cell.style.borderRadius = "50%";
+                cell.style.backgroundColor = "black"
             });
 
             grid.appendChild(cell);
