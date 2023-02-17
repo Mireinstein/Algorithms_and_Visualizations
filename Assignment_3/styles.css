@@ -1,0 +1,14 @@
+main{
+    width: 600px;
+    height: 800px;
+    margin: 0 auto;
+    background-color: rgb(206, 186, 199);
+    text-align: center;
+}
+
+.grid{
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+    background-color: transparent;
+}
