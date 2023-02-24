@@ -48,7 +48,7 @@ function gatherState(i,config){
     else{
         oldState=config[i-1]+""+config[i]+""+config[i+1];
     }
-    return oldtate;
+    return oldState;
 }
 
 function applyRule(config,rule){
@@ -80,5 +80,60 @@ function applyRule(config,rule){
     return newConfig;
 
 }
+
+function displayPage(startingConfig){
+     //display page
+    const grid=document.getElementById("automata-visualizer");
+    grid.style.display="grid";
+    grid.style.gridTemplateRows = "repeat(60, 1fr)";
+    grid.style.gridTemplateColumns = "repeat(60, 1fr)";
+
+    for (let i=0;i<60;i++){
+        for(let j=0;j<60;j++){
+        let cell=document.createElement("div");
+        cell.id="cell-"+i+"-"+j;
+        
+        cell.style.height = "10px";
+        cell.style.width = "10px";
+        cell.style.border = "1px solid black"; // Add a black border to the cell
+
+        if(i===0){
+          if(startingConfig[j]===1){
+            cell.style.backgroundColor="rgb(0,0,0)";
+          }
+          else{
+            cell.style.backgroundColor="rgb(255,255,255)";
+          }
+        }
+        else{
+            cell.style.backgroundColor="rgb(255,255,255)";
+        }
+        grid.appendChild(cell);
+        }
+    }
+}
+
+function transition(config,rowNumber){
+ for(let j=0;j<60;j++){
+   let cell=document.getElementById("cell-"+rowNumber+"-"+j);
+
+    if(config[j]===1){
+      cell.style.backgroundColor="rgb(0,0,0)"
+    }
+  }
+  setTimeout(() => {}, 0);
+}
+
+function go(){
+    let rule = document.getElementById("ruleBox").value;
+    const startingConfig=[0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0];
+    let newConfig=applyRule(startingConfig,rule);
+    for(let i=1;i<60;i++){
+        newConfig=applyRule(newConfig,rule);
+        transition(newConfig,i);
+    }
+}
+
+
 
 module.exports = { applyRule };

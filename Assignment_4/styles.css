@@ -1,0 +1,25 @@
+body{
+    background-color: blueviolet;
+}
+
+h1,p{
+    text-align: center;
+}
+#automata-visualizer{
+    width: 600px;
+    height: 500px;
+    margin: 0 auto;
+    margin-bottom: 50px;
+    background-color:transparent;
+    margin-top: 50px;
+}
+#proceed{
+background-color: green;
+}
+#revert{
+    background-color: yellow;
+}
+
+.form{
+    text-align: center;
+}
