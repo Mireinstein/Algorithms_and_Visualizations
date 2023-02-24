@@ -8,7 +8,7 @@
     <script src="cellular-automata.js"></script>
     <script>
         window.onload = () => {
-            startingConfig=[0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0];
+            startingConfig=[1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1];
             displayPage(startingConfig);
         }
     </script>
@@ -18,9 +18,9 @@
 
 <body>
     <h1>Cellular Automata Visualizer</h1>
-    <p>Below, you can enter a rule number(between 0 to 255) that you'd like to visualize</p>
+    <p>Below, you can enter a rule number(between 0 to 255) that you'd like to visualize.(Check out rule 110)</p>
     <form class="form">
-		<label for="myTextBox">Enter the rule number:</label>
+		<label for="ruleBox">Enter the rule number:</label>
 		<input type="text" id="ruleBox" name="name">
 		<button type="button" id="proceed" onclick="go()">Submit</button>
         <button id="revert" onclick="window.location.reload()">Reset</button>

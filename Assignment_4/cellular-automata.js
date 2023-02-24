@@ -126,7 +126,7 @@ function transition(config,rowNumber){
 
 function go(){
     let rule = document.getElementById("ruleBox").value;
-    const startingConfig=[0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0,0,1,1,0,1,0,1,1,0,0];
+    const startingConfig=[1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1];
     let newConfig=applyRule(startingConfig,rule);
     for(let i=1;i<60;i++){
         newConfig=applyRule(newConfig,rule);
