@@ -1,0 +1,18 @@
+body{
+    background-color: pink;
+}
+
+h1{
+    text-align: center;
+}
+
+p{
+    text-align: center;
+}
+
+#canvas{
+    background-color: white;
+    display: block;
+    margin: auto;
+ 
+}
