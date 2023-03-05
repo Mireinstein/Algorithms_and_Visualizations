@@ -14,40 +14,41 @@ function displayPage() {
   rectangle.setAttribute("stroke-width", "5");
   rectangle.setAttribute("fill", "white");
   svg.appendChild(rectangle);
-  //add event listeners to the rectangle
+
+  //add event listeners to the canvas
   let isDrawing = false;
   let prevX = 0;
   let prevY = 0;
-  
+  let lineInProgress = null;
+
   svg.addEventListener("mousedown", (event) => {
     isDrawing = true;
     prevX = event.offsetX;
     prevY = event.offsetY;
-  });
-  
-  svg.addEventListener("mousemove", (event) => {
-    if (isDrawing === true) {
-      // Remove any existing lines
-      while (svg.lastChild && svg.lastChild.tagName === "line") {
-        svg.removeChild(svg.lastChild);
-      }
-  
-      // Create a new line from the initial mouse down position to the current mouse position
-      let line = document.createElementNS(ns, "line");
-      line.setAttribute("x1", prevX);
-      line.setAttribute("y1", prevY);
-      line.setAttribute("x2", event.offsetX);
-      line.setAttribute("y2", event.offsetY);
-      line.setAttribute("stroke", "black");
-      line.setAttribute("stroke-width", "5");
-  
-      svg.appendChild(line);
+    if (lineInProgress === null) {
+      lineInProgress = document.createElementNS(ns, "line");
+      lineInProgress.setAttribute("x1", prevX);
+      lineInProgress.setAttribute("y1", prevY);
+      lineInProgress.setAttribute("x2", prevX);
+      lineInProgress.setAttribute("y2", prevY);
+      lineInProgress.setAttribute("stroke", "black");
+      lineInProgress.setAttribute("stroke-width", "5");
+      svg.appendChild(lineInProgress);
     }
   });
-  
-  
+
+  svg.addEventListener("mousemove", (event) => {
+    if (isDrawing === true && lineInProgress !== null) {
+      lineInProgress.setAttribute("x2", event.offsetX);
+      lineInProgress.setAttribute("y2", event.offsetY);
+    }
+  });
+
   svg.addEventListener("mouseup", (event) => {
     isDrawing = false;
+    if (lineInProgress !== null) {
+      lineInProgress = null;
+    }
   });
 
   svg.appendChild(rectangle);
