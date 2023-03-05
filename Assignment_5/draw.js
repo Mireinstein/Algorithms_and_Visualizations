@@ -26,12 +26,13 @@ function displayPage() {
     });
     
     svg.addEventListener("mousemove", (event) => {
+      
       if (isDrawing === true) {
         // Remove any existing lines
         while (svg.lastChild && svg.lastChild.tagName === "line") {
           svg.removeChild(svg.lastChild);
         }
-    
+
         // Create a new line from the initial mouse down position to the current mouse position
         let line = document.createElementNS(ns, "line");
         line.setAttribute("x1", prevX);
