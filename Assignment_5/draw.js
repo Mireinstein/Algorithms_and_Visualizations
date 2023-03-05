@@ -12,21 +12,27 @@ function displayPage() {
     rectangle.setAttribute("height", "400");
     rectangle.setAttribute("stroke", "black");
     rectangle.setAttribute("stroke-width", "5");
-    rectangle.setAttribute("fill", "none");
-  
+    rectangle.setAttribute("fill", "white");
+    svg.appendChild(rectangle);
     //add event listeners to the rectangle
     let isDrawing = false;
     let prevX = 0;
     let prevY = 0;
     
-    rectangle.addEventListener("mousedown", (event) => {
+    svg.addEventListener("mousedown", (event) => {
       isDrawing = true;
       prevX = event.offsetX;
       prevY = event.offsetY;
     });
     
-    rectangle.addEventListener("mousemove", (event) => {
+    svg.addEventListener("mousemove", (event) => {
       if (isDrawing === true) {
+        // Remove any existing lines
+        while (svg.lastChild && svg.lastChild.tagName === "line") {
+          svg.removeChild(svg.lastChild);
+        }
+    
+        // Create a new line from the initial mouse down position to the current mouse position
         let line = document.createElementNS(ns, "line");
         line.setAttribute("x1", prevX);
         line.setAttribute("y1", prevY);
@@ -34,15 +40,12 @@ function displayPage() {
         line.setAttribute("y2", event.offsetY);
         line.setAttribute("stroke", "black");
         line.setAttribute("stroke-width", "5");
-        
+    
         svg.appendChild(line);
-        
-        prevX = event.offsetX;
-        prevY = event.offsetY;
       }
     });
     
-    rectangle.addEventListener("mouseup", (event) => {
+    svg.addEventListener("mouseup", (event) => {
       isDrawing = false;
     });
   
