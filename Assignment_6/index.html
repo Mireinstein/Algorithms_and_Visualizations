@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Title Your Page</title>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <script src="convex-hull.js" defer></script>
+   <script src="ch-tester.js" defer></script>
+  </head>
+  <body>
+    <div id="root">
+      <h1>Visualizing Convex Hull</h1>
+      <p>Click below to add a set of points. You can start visualizing py clicking "start". To visualize the next
+        step, click "step". You can also use the animate button to visualize all at once. </p>
+      <div class="border-div">
+        <svg id="convex-hull-box" xmlns="http://www.w3.org/2000/svg" width="600" height="400" stroke="black" stroke-width="3">
+        </svg>
+      </div>
+      <div class="buttons">
+        <br>
+        <button type="button"  onclick="convexHull.start()">Start</button>
+        <button type="button" onclick="convexHull.step()">Step</button>
+        <button type="button" onclick="convexHull.animate()">Animate</button>
+      </div>
+    </div>
+  </body>
+</html>
