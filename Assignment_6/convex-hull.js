@@ -217,16 +217,16 @@ function ConvexHull (ps, viewer) {
     this.step = function () {
 
         if(stack.length>2){
-            if(this.ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])){
+            if(this.ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])>0){
                 prevTurnLeft=true;
             }
             else{
                 prevTurnLeft=false;
             }
         }
-        else{
-            prevTurnLeft=false;
-        }
+        // else{
+        //     prevTurnLeft=false;
+        // }
 
         if(curPoint==1){
         viewer.unHighlightPoint(ps.points[0]);
@@ -244,7 +244,9 @@ function ConvexHull (ps, viewer) {
         else{
             viewer.unHighlightPoint(ps.points[curPoint]);
             curPoint++;
-            stack.push(ps.points[curPoint]);
+            if(curPoint<=ps.points.length-1){
+                stack.push(ps.points[curPoint]);
+            }
             viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
             viewer.highlightPoint(stack[stack.length-1]);
         }
@@ -252,43 +254,7 @@ function ConvexHull (ps, viewer) {
         //if we are done working with upper hull
         if(stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0){
           console.log("lower hull");
-          //reinitialize variables to start working on lower hull  
-          viewer.unHighlightPoint(stack[stack.length-1]);
-          upperHull=false;
-          ps.points.reverse();
-          stack=[];
-          prevTurnLeft=false;
-          let curPoint=0;
-          stack.push(ps.points[0]);
-          stack.push(ps.points[1]);
-          console.log(ps.points[0]);
-          console.log(ps.points[1])
-          viewer.drawSegment(stack[0], stack[1]);
-          viewer.highlightPoint(ps.points[0]);
-          curPoint=1;
-
-
-          if(ps.points.length<1){
-            viewer.highlightPoint(ps.points[0]);
-            return;
-         }
-    
-         else if(ps.points.length==2){
-           viewer.highlightPoint(ps.points[1]);
-           viewer.drawSegment(ps.points[0], ps.points[1]);
-           return;
-         }
-         else{
-            stack.push(ps.points[0]);
-            stack.push(ps.points[1])
-            viewer.drawSegment(stack[0], stack[1]);
-            viewer.highlightPoint(ps.points[0]);
-            highlighted=stack[0];
-            curPoint=1;
-         }
         }
-       
-
             
     }
 
