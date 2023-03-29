@@ -24,16 +24,17 @@ p{
 }
 
 .ch-segment{
-   stroke: green;
+    stroke: black;
    stroke-width: 4;
 }
 
 .no-ch-segment{
-    stroke: grey;
+    stroke: red;
     stroke-width: 2;
+ 
 }
 
 .highlight{
-    stroke: red;
+    stroke: green;
     stroke-width: 5;
 }
