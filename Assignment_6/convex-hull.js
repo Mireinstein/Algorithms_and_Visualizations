@@ -137,7 +137,8 @@ function ConvexHullViewer (svg, ps) {
 
     this.drawSegment=function(point1,point2){
         let segment=document.createElementNS(SVG_NS,"line")
-        segment.classList.add("ch-segment")
+        segment.classList.add("ch-segment");
+        segment.setAttributeNS(null,"id",point1.id+"_"+point2.id);
         segment.setAttributeNS(null,"x1",point1.x);
         segment.setAttributeNS(null,"y1",point1.y);
         segment.setAttributeNS(null,"x2",point2.x);
@@ -146,13 +147,19 @@ function ConvexHullViewer (svg, ps) {
     }
 
     this.updateSegment=function(point1,point2){
-        let segment=document.createElementNS(SVG_NS,"line")
-        segment.classList.add("no-ch-segment")
-        segment.setAttributeNS(null,"x1",point1.x);
-        segment.setAttributeNS(null,"y1",point1.y);
-        segment.setAttributeNS(null,"x2",point2.x);
-        segment.setAttributeNS(null,"y2",point2.y);
-        svg.appendChild(segment);
+        // let segment=document.createElementNS(SVG_NS,"line")
+        // segment.classList.add("no-ch-segment")
+        // segment.setAttributeNS(null,"x1",point1.x);
+        // segment.setAttributeNS(null,"y1",point1.y);
+        // segment.setAttributeNS(null,"x2",point2.x);
+        // segment.setAttributeNS(null,"y2",point2.y);
+        // svg.appendChild(segment);
+        segment=document.getElementById(point1.id+"_"+point2.id);
+        if(segment){
+            segment.classList.remove("ch-segment");
+            svg.removeChild(segment);
+        }
+        
     }
 
     this.highlightPoint=function(point){
@@ -181,6 +188,7 @@ function ConvexHull (ps, viewer) {
     let stack = [];
     let prevTurnLeft=false;
     let curPoint=0;
+    let started_LowerHull=false;
     this.start = function () {
     ps.sort();
     //clear
@@ -210,12 +218,23 @@ function ConvexHull (ps, viewer) {
         highlighted=stack[0];
         curPoint=1;
      }
+
+     let button=document.querySelector("#step");
+     button.addEventListener("click",this.step());
     
     }
 
     // perform a single step of the Graham scan algorithm performed on ps
     this.step = function () {
 
+                //if we are done working with upper hull
+        if((stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0)||(started_LowerHull)){
+            let button=document.querySelector("#step");
+            button.removeEventListener("click",this.step);
+            button.addEventListener("click",this.backStep);
+        }
+         //working on upper hull
+        /////////////////////////
         if(stack.length>2){
             if(this.ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])>0){
                 prevTurnLeft=true;
@@ -224,9 +243,9 @@ function ConvexHull (ps, viewer) {
                 prevTurnLeft=false;
             }
         }
-        // else{
-        //     prevTurnLeft=false;
-        // }
+        else{
+            prevTurnLeft=false;
+        }
 
         if(curPoint==1){
         viewer.unHighlightPoint(ps.points[0]);
@@ -250,12 +269,10 @@ function ConvexHull (ps, viewer) {
             viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
             viewer.highlightPoint(stack[stack.length-1]);
         }
-
-        //if we are done working with upper hull
-        if(stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0){
-          console.log("lower hull");
-        }
             
+    }
+    this.backStep=function(){
+     alert("Working on it")
     }
 
     this.ccw=function(p1,p2,p3){
@@ -274,8 +291,7 @@ function ConvexHull (ps, viewer) {
     // the returned PointSet should be the vertices of the convex hull
     // in clockwise order, starting from the left-most point, breaking
     // ties by minimum y-value.
-    this.getConvexHull = function () {
-        
+    this.getConvexHull = function () {  
 
     let upperSet=[];
     const lowerSet=[];
