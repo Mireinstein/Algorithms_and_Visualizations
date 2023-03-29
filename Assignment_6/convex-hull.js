@@ -176,8 +176,13 @@ function ConvexHull (ps, viewer) {
     this.viewer = viewer;  // a ConvexHullViewer for this visualization
 
     // start a visualization of the Graham scan algorithm performed on ps
+     // create a stack to store the points in the convex hull
+    
+    let stack = [];
+    let prevTurnLeft=false;
+    let curPoint=0;
     this.start = function () {
-	ps.sort();
+    ps.sort();
     //clear
     while(document.querySelector(".ch-segment")){
         document.querySelector(".ch-segment").remove;
@@ -186,42 +191,105 @@ function ConvexHull (ps, viewer) {
     while(document.querySelector(".no-ch-segment")){
         document.querySelector(".no-ch-segment").remove;
     }
+
+    if(ps.points.length<1){
+        viewer.highlightPoint(ps.points[0]);
+        return;
+     }
+
+     else if(ps.points.length==2){
+       viewer.highlightPoint(ps.points[1]);
+       viewer.drawSegment(ps.points[0], ps.points[1]);
+       return;
+     }
+     else{
+        stack.push(ps.points[0]);
+        stack.push(ps.points[1])
+        viewer.drawSegment(stack[0], stack[1]);
+        viewer.highlightPoint(ps.points[0]);
+        highlighted=stack[0];
+        curPoint=1;
+     }
     
-    viewer.highlightPoint(ps.points[0]);
     }
 
     // perform a single step of the Graham scan algorithm performed on ps
     this.step = function () {
-            // sort the points
-            ps.sort;
-            let  highlighted=ps.points[0]
-        
-            // highlight the leftmost point
-            viewer.highlightPoint(ps.points[0]);
-        
-            // create a stack to store the points in the convex hull
-            const stack = [ps.points[0], ps.points[1]];
-        
-            // draw the first line segment
-            viewer.drawSegment(ps.points[0], ps.points[1]);
-        
-            // iterate over the remaining points
-            for (let i = 2; i < ps.points.length; i++) {
-                const p = ps.points[i];
-                while (stack.length >= 2 && this.ccw(stack[stack.length - 2], stack[stack.length - 1], p) >0) {
-                    viewer.updateSegment(stack[stack.length - 2],stack[stack.length - 1] );
-                    viewer.drawSegment(stack[stack.length - 1],p);
-                    viewer.updateSegment(stack[stack.length - 1],p );
-                    stack.pop();
-                    viewer.drawSegment(stack[stack.length - 1],p);
-                }
-                viewer.unHighlightPoint(highlighted);
-                viewer.highlightPoint(p);
-                viewer.drawSegment(stack[stack.length - 1],p);
-                stack.push(p);
-                highlighted=p;
+
+        if(stack.length>2){
+            if(this.ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])){
+                prevTurnLeft=true;
             }
-        
+            else{
+                prevTurnLeft=false;
+            }
+        }
+        else{
+            prevTurnLeft=false;
+        }
+
+        if(curPoint==1){
+        viewer.unHighlightPoint(ps.points[0]);
+        viewer.highlightPoint(ps.points[1]);
+        }
+ 
+        if(prevTurnLeft){
+            viewer.unHighlightPoint(ps.points[curPoint]);
+            viewer.updateSegment(stack[stack.length-2],stack[stack.length-1]);
+            viewer.updateSegment(stack[stack.length-3],stack[stack.length-2]);
+            viewer.drawSegment(stack[stack.length-3],stack[stack.length-1]);
+            stack.splice(stack.length-2,1);
+            viewer.highlightPoint(stack[stack.length-1]);
+        }
+        else{
+            viewer.unHighlightPoint(ps.points[curPoint]);
+            curPoint++;
+            stack.push(ps.points[curPoint]);
+            viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
+            viewer.highlightPoint(stack[stack.length-1]);
+        }
+
+        //if we are done working with upper hull
+        if(stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0){
+          console.log("lower hull");
+          //reinitialize variables to start working on lower hull  
+          viewer.unHighlightPoint(stack[stack.length-1]);
+          upperHull=false;
+          ps.points.reverse();
+          stack=[];
+          prevTurnLeft=false;
+          let curPoint=0;
+          stack.push(ps.points[0]);
+          stack.push(ps.points[1]);
+          console.log(ps.points[0]);
+          console.log(ps.points[1])
+          viewer.drawSegment(stack[0], stack[1]);
+          viewer.highlightPoint(ps.points[0]);
+          curPoint=1;
+
+
+          if(ps.points.length<1){
+            viewer.highlightPoint(ps.points[0]);
+            return;
+         }
+    
+         else if(ps.points.length==2){
+           viewer.highlightPoint(ps.points[1]);
+           viewer.drawSegment(ps.points[0], ps.points[1]);
+           return;
+         }
+         else{
+            stack.push(ps.points[0]);
+            stack.push(ps.points[1])
+            viewer.drawSegment(stack[0], stack[1]);
+            viewer.highlightPoint(ps.points[0]);
+            highlighted=stack[0];
+            curPoint=1;
+         }
+        }
+       
+
+            
     }
 
     this.ccw=function(p1,p2,p3){
