@@ -188,7 +188,10 @@ function ConvexHull (ps, viewer) {
     let stack = [];
     let prevTurnLeft=false;
     let curPoint=0;
-    let started_LowerHull=false;
+
+    lower_Hull=false;
+
+    let lower_stack=[];
     this.start = function () {
     ps.sort();
     //clear
@@ -213,71 +216,159 @@ function ConvexHull (ps, viewer) {
      else{
         stack.push(ps.points[0]);
         stack.push(ps.points[1])
-        viewer.drawSegment(stack[0], stack[1]);
         viewer.highlightPoint(ps.points[0]);
-        highlighted=stack[0];
         curPoint=1;
+        let button=document.querySelector("#step");
+        button.addEventListener("click",this.step);
      }
 
-     let button=document.querySelector("#step");
-     button.addEventListener("click",this.step());
     
     }
 
     // perform a single step of the Graham scan algorithm performed on ps
     this.step = function () {
-
+        console.log("Upper Hull")
                 //if we are done working with upper hull
-        if((stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0)||(started_LowerHull)){
+        if(lower_Hull){
+            console.log("supposed to be in lower Hull")
             let button=document.querySelector("#step");
             button.removeEventListener("click",this.step);
-            button.addEventListener("click",this.backStep);
-        }
-         //working on upper hull
-        /////////////////////////
-        if(stack.length>2){
-            if(this.ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])>0){
-                prevTurnLeft=true;
+            button.addEventListener("click",this.backStep());
+            viewer.unHighlightPoint(ps.points[ps.points.length-1]);
+            ps.points.reverse();
+            lower_stack.push(ps.points[0]);
+            lower_stack.push(ps.points[1]);
+            viewer.highlightPoint(lower_stack[0])
+            curPoint=1;
+        }        
+        else if((stack[stack.length-1].compareTo(ps.points[ps.points.length-1])==0)){
+            lower_Hull=true;
+            if(stack.length>2){
+                if(ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])>0){
+                    prevTurnLeft=true;
+                }
+                else{
+                    prevTurnLeft=false;
+                }
             }
             else{
                 prevTurnLeft=false;
             }
-        }
-        else{
-            prevTurnLeft=false;
-        }
-
-        if(curPoint==1){
-        viewer.unHighlightPoint(ps.points[0]);
-        viewer.highlightPoint(ps.points[1]);
-        }
- 
-        if(prevTurnLeft){
-            viewer.unHighlightPoint(ps.points[curPoint]);
-            viewer.updateSegment(stack[stack.length-2],stack[stack.length-1]);
-            viewer.updateSegment(stack[stack.length-3],stack[stack.length-2]);
-            viewer.drawSegment(stack[stack.length-3],stack[stack.length-1]);
-            stack.splice(stack.length-2,1);
-            viewer.highlightPoint(stack[stack.length-1]);
-        }
-        else{
-            viewer.unHighlightPoint(ps.points[curPoint]);
-            curPoint++;
-            if(curPoint<=ps.points.length-1){
-                stack.push(ps.points[curPoint]);
+    
+            if(prevTurnLeft){
+                viewer.unHighlightPoint(ps.points[curPoint]);
+                viewer.updateSegment(stack[stack.length-2],stack[stack.length-1]);
+                viewer.updateSegment(stack[stack.length-3],stack[stack.length-2]);
+                viewer.drawSegment(stack[stack.length-3],stack[stack.length-1]);
+                stack.splice(stack.length-2,1);
+                viewer.highlightPoint(stack[stack.length-1]);
             }
-            viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
-            viewer.highlightPoint(stack[stack.length-1]);
-        }
+            else{
+                stack.push(ps.points[curPoint]);
+                curPoint++;
+                viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
+                viewer.unHighlightPoint(stack[stack.length-2]);
+                viewer.highlightPoint(stack[stack.length-1]);
+            }
             
-    }
-    this.backStep=function(){
-     alert("Working on it")
+
+        }
+         //working on upper hull
+        /////////////////////////
+        else{
+            if(curPoint==1){
+                viewer.drawSegment(stack[0], stack[1]);
+                viewer.unHighlightPoint(stack[0]);
+                viewer.highlightPoint(stack[1])
+                curPoint++;
+            }
+            else{
+                if(stack.length>2){
+                    if(ccw(stack[stack.length-3],stack[stack.length-2],stack[stack.length-1])>0){
+                        prevTurnLeft=true;
+                    }
+                    else{
+                        prevTurnLeft=false;
+                    }
+                }
+                else{
+                    prevTurnLeft=false;
+                }
+        
+                if(prevTurnLeft){
+                    viewer.unHighlightPoint(ps.points[curPoint]);
+                    viewer.updateSegment(stack[stack.length-2],stack[stack.length-1]);
+                    viewer.updateSegment(stack[stack.length-3],stack[stack.length-2]);
+                    viewer.drawSegment(stack[stack.length-3],stack[stack.length-1]);
+                    stack.splice(stack.length-2,1);
+                    viewer.highlightPoint(stack[stack.length-1]);
+                }
+                else{
+                    stack.push(ps.points[curPoint]);
+                    curPoint++;
+                    viewer.drawSegment(stack[stack.length-2],stack[stack.length-1]);
+                    viewer.unHighlightPoint(stack[stack.length-2]);
+                    viewer.highlightPoint(stack[stack.length-1]);
+                }
+            } 
+        }
+  
     }
 
-    this.ccw=function(p1,p2,p3){
-        return (p2.y - p1.y) * (p3.x - p2.x) > (p2.x - p1.x) * (p3.y - p2.y);
+
+    this.backStep=function(){
+        console.log("Lower Hull")
+        //if we are done
+        if((lower_stack[lower_stack.length-1].compareTo(ps.points[ps.points.length-1])==0)){
+            let button=document.querySelector("#step");
+            button.removeEventListener("click",this.backStep);
+
+        }
+
+        else{
+            if(curPoint==1){
+                viewer.drawSegment(lower_stack[0], lower_stack[1]);
+                viewer.unHighlightPoint(lower_stack[0]);
+                viewer.highlightPoint(lower_stack[1])
+                curPoint++;
+            }
+            else{
+                if(lower_stack.length>2){
+                    if(ccw(lower_stack[lower_stack.length-3],lower_stack[lower_stack.length-2],lower_stack[lower_stack.length-1])>0){
+                        prevTurnLeft=true;
+                    }
+                    else{
+                        prevTurnLeft=false;
+                    }
+                }
+                else{
+                    prevTurnLeft=false;
+                }
+            
+        
+                if(prevTurnLeft){
+                    viewer.unHighlightPoint(ps.points[curPoint]);
+                    viewer.updateSegment(lower_stack[lower_stack.length-2],lower_stack[lower_stack.length-1]);
+                    viewer.updateSegment(lower_stack[lower_stack.length-3],lower_stack[lower_stack.length-2]);
+                    viewer.drawSegment(lower_stack[lower_stack.length-3],lower_stack[lower_stacklength-1]);
+                    lower_stack.splice(lower_stack.length-2,1);
+                    viewer.highlightPoint(lower_stack[lower_stack.length-1]);
+                }
+                else{
+                    viewer.unHighlightPoint(ps.points[curPoint]);
+                    curPoint++;
+                    if(curPoint<=ps.points.length-1){
+                        lower_stack.push(ps.points[curPoint]);
+                    }
+                    viewer.drawSegment(lower_stack[lower_stack.length-2],lower_stack[lower_stack.length-1]);
+                    viewer.highlightPoint(lower_stack[lower_stack.length-1]);
+                }    
+        }
+
+        }
+
     }
+
     this.animate = function () {
 	
         // COMPLETE THIS METHOD
@@ -340,17 +431,6 @@ function ConvexHull (ps, viewer) {
     }
 
 }
-    // turnsRight=function(convexSet){
-    //     y_actual=convexSet[convexSet.length-1].y;
-    //     x_3=convexSet[convexSet.length-1].x;
-    //     y_2=convexSet[convexSet.length-2].y;
-    //     x_2=convexSet[convexSet.length-2].x;
-    //     y_1=convexSet[convexSet.length-3].y;
-    //     x_1=convexSet[convexSet.length-3].x;
-    //     m=(y_2-y_1)/(x_2-x_1);
-    //     y_3=((m*x_3) + (y_1-(m*x_1)))
-    //     return y_3<=y_actual;
-    // }
 
      this.turnsRight= function(convexSet) {
         const p3 = convexSet[convexSet.length - 1];
@@ -361,6 +441,10 @@ function ConvexHull (ps, viewer) {
       
         return crossProduct < 0;
       }
+
+    this.ccw=function(p1,p2,p3){
+        return (p2.y - p1.y) * (p3.x - p2.x) > (p2.x - p1.x) * (p3.y - p2.y);
+    }
       
 const svg =document.querySelector("#convex-hull-box");
 const pointSet= new PointSet();
