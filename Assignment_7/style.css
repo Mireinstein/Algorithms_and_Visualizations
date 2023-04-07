@@ -1,0 +1,30 @@
+#svg{
+    text-align: center;
+    background-color: white;
+}
+
+body{
+    background-color: rgb(154, 154, 209);
+    text-align: center;
+}
+
+#canvas{
+    text-align: center;
+}
+
+.image{
+    text-align: center;
+}
+
+table{
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+}
+
+h1,h2{
+    text-align: center;
+    text-decoration: underline;
+}

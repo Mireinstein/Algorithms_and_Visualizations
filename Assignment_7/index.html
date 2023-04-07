@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barnsley Fern</title>
+    <script src="barnsley_fern.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Self-Similarity: Barnsley Ferns</h1>
+  <div id="canvas">
+    <svg id="svg" height="600" width="600">
+    </svg>
+  </div>
+  <h2>Description and Inspiration</h2>
+  <p>
+   The Barnsley fern is a self-similar mathematically generated pattern that can be reproducible at any
+   magnification or reduction. Barnsley's fern uses four affine transformations. The formula for one transformation is the following:
+  </p>
+
+  <div class="image">
+    <img src="affine_transformation.svg" alt="barnsley_fern affine affine transformation">
+  </div>
+ 
+  <p>
+    In the table, the columns "a" through "f" are the coefficients of the equation, and "p" represents the probability factor.
+  </p>
+  <div class="table"></div>
+    <img src="affine_table.png" height="400" width="500" alt="affine transformation table">
+  </div>
+
+  <p>
+    Inspiration: <a href="https://en.wikipedia.org/wiki/Barnsley_fern" target="_blank">Barnsley Ferns</a>
+  </p>
+
+</body>
+</html>
