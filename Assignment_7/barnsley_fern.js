@@ -14,17 +14,25 @@ function update() {
   let nextX, nextY;
   let r = Math.random();
   if (r < 0.01) {
-    nextX =  0;
-    nextY =  0.16 * y;
+    // Apply affine transformation matrix
+    let a = 0, b = 0, c = 0, d = 0.16, e = 0, f = 0;
+    nextX = a * x + b * y + e;
+    nextY = c * x + d * y + f;
   } else if (r < 0.86) {
-    nextX =  0.85 * x + 0.04 * y;
-    nextY = -0.04 * x + 0.85 * y + 1.6;
+    // Apply affine transformation matrix
+    let a = 0.85, b = 0.04, c = -0.04, d = 0.85, e = 0, f = 1.6;
+    nextX = a * x + b * y + e;
+    nextY = c * x + d * y + f;
   } else if (r < 0.93) {
-    nextX =  0.20 * x - 0.26 * y;
-    nextY =  0.23 * x + 0.22 * y + 1.6;
+    // Apply affine transformation matrix
+    let a = 0.20, b = -0.26, c = 0.23, d = 0.22, e = 0, f = 1.6;
+    nextX = a * x + b * y + e;
+    nextY = c * x + d * y + f;
   } else {
-    nextX = -0.15 * x + 0.28 * y;
-    nextY =  0.26 * x + 0.24 * y + 0.44;
+    // Apply affine transformation matrix
+    let a = -0.15, b = 0.28, c = 0.26, d = 0.24, e = 0, f = 0.44;
+    nextX = a * x + b * y + e;
+    nextY = c * x + d * y + f;
   }
 
   // Scaling and positioning
