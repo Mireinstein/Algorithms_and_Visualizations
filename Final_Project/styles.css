@@ -1,0 +1,42 @@
+body{
+    background-color: white
+}
+
+h1{
+    text-align: center;
+}
+
+
+#root{
+    margin: auto;
+    display: block;
+}
+
+#canvas{
+    background-color: rgb(237, 224, 224);
+    display: block;
+    margin: auto;
+ 
+}
+
+#buttons{
+    display: block;
+    margin: auto;
+}
+
+.points{
+    r: 10px;
+    fill:black;
+    stroke-width: 4;
+}
+
+
+.segment{
+    stroke: black;
+    stroke-width: 4;
+ }
+ 
+ .highlight{
+     stroke: green;
+     stroke-width: 5;
+ }

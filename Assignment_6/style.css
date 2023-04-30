@@ -1,5 +1,5 @@
 body{
-    background-color: pink;
+    background-color: rgb(252, 226, 230);
 }
 
 h1{
@@ -10,8 +10,8 @@ p{
     text-align: center;
 }
 
-#convex-hull-box{
-    background-color: white;
+#canvas{
+    background-color: rgb(237, 224, 224);
     display: block;
     margin: auto;
  
@@ -23,18 +23,3 @@ p{
     stroke-width: 4;
 }
 
-.ch-segment{
-   stroke: black;
-   stroke-width: 4;
-}
-
-.no-ch-segment{
-    stroke: red;
-    stroke-width: 2;
- 
-}
-
-.highlight{
-    stroke: green;
-    stroke-width: 5;
-}
