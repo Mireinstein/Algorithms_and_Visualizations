@@ -275,11 +275,10 @@ function kruskal(){
     let spanningTree=[];
     edgeSet.sort()
     let edges=edgeSet.edges;
-
-    alert(edges.length)
     
     //while the set of edges is non-empty and spanning Tree is not spanning
-    while(edges.length>0 && spanningTree.length<=points.length){
+    //add this condition as well(&& spanningTree.length<=points.length)
+    while(edges.length>0 ){
 
         //remove the lightest edge
         let edge=edges.shift();
@@ -290,12 +289,11 @@ function kruskal(){
         //if u and v are in same component, do nothing
         if (spanningTree.includes(u) && spanningTree.includes(v)) {
             // draw segment
-            mstViewer.highlightSegment(u, v);
+            // mstViewer.highlightSegment(u, v);
             
-            // remove segment after 1 second (1000 milliseconds)
-            setTimeout(() => {
-              mstViewer.unHighlightSegment(u, v);
-            }, 1000);
+            // add condition to remove segment after 1 second (1000 milliseconds)
+            //   mstViewer.unHighlightSegment(u, v);
+           
           }
         //highlight this edge and add u,v to the 
         else{
@@ -323,7 +321,7 @@ function kruskal(){
 
 function prim(mstViewer,pointSet,edgeSet){
      //pointSet and edgeSet are objects that contain arrays of points edges respectively
-    alert("Still Working on it")
+    alert("Still Working on it!")
 
 }
 
