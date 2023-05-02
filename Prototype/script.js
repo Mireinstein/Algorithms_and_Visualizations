@@ -119,6 +119,29 @@ function Edge (vtx1, vtx2, id) {
     this.equals = function (vtx1, vtx2) {
 	return (this.vtx1 == vtx1 && this.vtx2 == vtx2) || (this.vtx1 == vtx2 && this.vtx2 == vtx1);
     }
+
+    this.weight=function(){
+      x1=vtx1.x;
+      y1=vtx1.y;
+      x2=vtx2.x;
+      y2=vtx2.y;
+     let distance = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
+      return distance;
+  }
+
+   // Compare this edge to another. The comparison is according to
+  // lexicographical ordering. 
+  this.compareTo = function (e) {
+      if (this.weight() > e.weight()) {
+          return 1;
+      }
+  
+      if (this.weight() < e.weight()) {
+          return -1;
+      }
+      return 0;
+      }
+
 }
 
 // an object to visualize and interact with a graph
@@ -134,7 +157,7 @@ function GraphVisualizer (graph, svg, text) {
     });
 
 
-    this.prim = null;
+    //this.prim = null;
 
     // sets of highlighted/muted vertices and edges
     this.highVertices = [];
@@ -307,18 +330,76 @@ function GraphVisualizer (graph, svg, text) {
 function Prim(graph, vis) {
     this.graph = graph;
     this.vis = vis;
+    this.V= graph.vertices;
+    this.E= graph.edges;
+
+    this.startVertex=null;
+
+    //choose random starting vertix and put it in S
+    this.curVtx=null;
+    this.visited=[];
+
+    //priority queue to keep track of edges
+    this.priorityQueue=[];
+
+    //set of MST edges
+    this.mST=[]
  
+    //triggers prim's algorithms
     this.start=function(){
-alert("We're starting")
-    }
+      this.startVertex = vis.highVertices.pop();
+	
+      if (this.startVertex == null) {
+          vis.updateTextBox("Please select a starting vertex and start again.");
+          return;
+      }
+        
+      this.curVtx = this.startVertex;
+      this.visited.push(this.startVertex);
   
+      this.vis.muteAll();
+      this.vis.unmuteVertex(this.startVertex);
+
+      //add all neighbours of current vertex to the priority queue
+      for (vtx of this.curVtx.neighbors) {
+        let edge=this.graph.getEdge(this.curVtx,vtx)
+        this.priorityQueue.push(edge);
+        }
+    }
+    
+  
+    //execute each step of prim's algorithm
   this.step = function () {
+    
+    while(this.priorityQueue.length>0){
+        sort(this.priorityQueue)
+     let edge=this.priorityQueue.shift();
+     let u=edge.vtx1;
+     let v=edge.vtx2;
+    
+
+     if (!this.visited.includes(v)){
+      this.mST.push(edge);
+      //vis.highlightEdge(edge)
+      for (vtx of v.neighbors) {
+        if (!this.visited.includes(vtx)) {
+         let neighborEdge=this.graph.getEdge(v,vtx);
+         this.priorityQueue.push(neighborEdge);
+        }
+       }
+     }
+    }
 	
 	}
   this.animate=function(){
 
   }
 	
+}
+
+//sort the edges in increasing order of the weights
+function sort(edges){
+ edges.sort((a,b) => {return a.compareTo(b)});
 }
 
 const svg = document.querySelector("#graph-box");
