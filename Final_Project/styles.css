@@ -76,7 +76,7 @@ body {
   }
   
   /* Style the game board canvas */
-  #canvas {
+  .canvas {
     background-color: #F0F0F0; /* A slightly darker grey background */
     display: block;
     margin: 0 auto;

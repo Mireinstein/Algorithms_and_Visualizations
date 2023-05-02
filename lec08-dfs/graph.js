@@ -7,11 +7,11 @@ function Graph(id) {
     this.nextVertexID = 0;   // ID to be assigned to next vtx
     this.nextEdgeID = 0;     // ID to be assigned to next edge
     
-    // create and return a new vertex at a given location
+    // create a and return a new vertex at a given location
     this.createVertex = function (x, y) {
-    const vtx = new Vertex(this.nextVertexID, this, x, y);
-    this.nextVertexID++;
-	  return vtx;
+	const vtx = new Vertex(this.nextVertexID, this, x, y);
+	this.nextVertexID++;
+	return vtx;
     }
 
     // add vtx to the set of vertices of this graph, if the vtx is not
@@ -119,29 +119,6 @@ function Edge (vtx1, vtx2, id) {
     this.equals = function (vtx1, vtx2) {
 	return (this.vtx1 == vtx1 && this.vtx2 == vtx2) || (this.vtx1 == vtx2 && this.vtx2 == vtx1);
     }
-
-    this.weight=function(){
-      x1=vtx1.x;
-      y1=vtx1.y;
-      x2=vtx2.x;
-      y2=vtx2.y;
-     let distance = Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2));
-      return distance;
-  }
-
-   // Compare this edge to another. The comparison is according to
-  // lexicographical ordering. 
-  this.compareTo = function (e) {
-      if (this.weight() > e.weight()) {
-          return 1;
-      }
-  
-      if (this.weight() < e.weight()) {
-          return -1;
-      }
-      return 0;
-      }
-
 }
 
 // an object to visualize and interact with a graph
@@ -157,7 +134,7 @@ function GraphVisualizer (graph, svg, text) {
     });
 
 
-    //this.prim = null;
+    this.dfs = null;
 
     // sets of highlighted/muted vertices and edges
     this.highVertices = [];
@@ -292,13 +269,13 @@ function GraphVisualizer (graph, svg, text) {
     }
 
     this.muteAllVertices = function () {
-	for (let vtx of this.graph.vertices) {
+	for (vtx of this.graph.vertices) {
 	    this.muteVertex(vtx);
 	}
     }
 
     this.muteAllEdges = function () {
-	for (let e of this.graph.edges) {
+	for (e of this.graph.edges) {
 	    this.muteEdge(e);
 	}
     }
@@ -309,7 +286,7 @@ function GraphVisualizer (graph, svg, text) {
     }
 
     this.unmuteAllVertices = function () {
-	for (let vtx of this.graph.vertices) {
+	for (vtx of this.graph.vertices) {
 	    this.unmuteVertex(vtx);
 	}
     }
@@ -327,133 +304,85 @@ function GraphVisualizer (graph, svg, text) {
         
 }
 
-function Prim(graph, vis) {
+function Dfs (graph, vis) {
     this.graph = graph;
     this.vis = vis;
-    this.V= graph.vertices;
-    this.E= graph.edges;
+    this.startVertex = null;
+    
+    this.visited = [];
+    this.active = [];
+    this.cur = null;
 
-    this.startVertex=null;
-
-    //choose random starting vertix and put it in S
-    this.curVtx=null;
-    this.visited=[];
-
-    //priority queue to keep track of edges
-    this.priorityQueue=[];
-
-    //set of MST edges
-    this.mST=[]
- 
-    //triggers prim's algorithms
-    this.start=function(){
-      this.startVertex = vis.highVertices.pop();
+    this.start = function () {
+	this.startVertex = vis.highVertices.pop();
 	
-      if (this.startVertex == null) {
-          vis.updateTextBox("Please select a starting vertex and start again.");
-          return;
-      }
-        
-      this.curVtx = this.startVertex;
-      this.visited.push(this.startVertex);
-  
-      this.vis.muteAll();
-      this.vis.unmuteVertex(this.startVertex);
-
-      //add all neighbours of current vertex to the priority queue
-      for (let vtx of this.curVtx.neighbors) {
-        let edge=this.graph.getEdge(this.curVtx,vtx)
-        this.priorityQueue.push(edge);
-        }
-    }
-    
-  
-    //execute each step of prim's algorithm
-  this.step = function () {
-   
+	if (this.startVertex == null) {
+	    vis.updateTextBox("Please select a starting vertex and start again.");
+	    return;
 	}
 
-  this.animate=function(){
-    while(this.priorityQueue.length>0){
-         sort(this.priorityQueue);
-         //debug
-        //  console.log("We have the following edges: ")
-        //  for(let curEdge of this.priorityQueue){
-        //  console.log(curEdge.weight());    
-        //  }
-         let edge=this.priorityQueue.shift();
-        //  console.log("We are chosing to highlight: "+edge.weight())
-         //stop debug
-         let v=edge.vtx2;
-         if (!this.visited.includes(v)){
-          this.mST.push(edge);
-          this.visited.push(v);
-          vis.unmuteEdge(edge)
-          
-          vis.highVertices.pop();
-          vis.highVertices.push(v);
-          vis.unmuteVertex(v);
-          vis.highlightEdge(edge)
-          for (let vtx of v.neighbors) {
-            if (!this.visited.includes(vtx)) {
-             let neighborEdge=this.graph.getEdge(v,vtx);
-             this.priorityQueue.push(neighborEdge);
-            }
-           }
-         }
-        }       
-    
+	this.visited = [];
+	this.active = [];
+		
+	this.cur = this.startVertex;
+
+	this.active.push(this.startVertex);
+	this.visited.push(this.startVertex);
+
+	
+	this.vis.muteAll();
+	this.vis.unmuteVertex(this.startVertex);
+	
+	console.log("Starting DFS from vertex " + this.startVertex.id);
+
     }
 
-}
-
-function Kruskal(graph, vis){
-    this.graph = graph;
-    this.vis = vis;
-    this.V= graph.vertices;
-    this.E= graph.edges;
-    this.visited=[];
- 
-    //triggers prim's algorithms
-    this.start=function(){
-     sort(this.E);
-    
-    }
-    
-  
-    //execute each step of prim's algorithm
-  this.step = function () {
-   
+    this.step = function () {
+	
+	// check if execution is finished
+	if (this.active.length == 0) {
+	    return;
 	}
 
-  this.animate=function(){
-    for(let edge of this.E){
-        let u=edge.vtx1;
-        let v=edge.vtx2;
-     if (this.visited.includes(u) && this.visited.includes(v)){
-     
-     }
-     else{
-        vis.unmuteEdge(edge)
-        vis.highlightEdge(edge)
-        // this.visited.push(u);
-        this.visited.push(v)
-     }
+	// find the next unvisited neighbor of this.cur
+	const next = this.nextUnvisitedNeighbor();
+	
+	if (next == null) {
+	    // if no next neighbor, cur is no longer active
+	    const prev = this.active.pop();
+	    this.vis.unhighlightVertex(prev);
+	    if (this.active.length > 0) {
+		this.cur = this.active[this.active.length - 1];
+		const edge = this.graph.getEdge(prev, this.cur);
+		this.vis.unhighlightEdge(edge);
+	    } else {
+		this.cur = null;
+	    }
+	} else {
+	    const edge = this.graph.getEdge(this.cur, next);
+	    vis.unmuteEdge(edge);
+	    vis.highlightEdge(edge);
+	    vis.unmuteVertex(next);
+	    vis.highlightVertex(next);
+	    this.cur = next;
+	    this.active.push(next);
+	    this.visited.push(next);
+	}
     }
- 
- }
+
+    this.nextUnvisitedNeighbor = function () {
+	for (vtx of this.cur.neighbors) {
+	    if (!this.visited.includes(vtx)) {
+		return vtx;
+	    }
+	}
+	return null;
+    }
 }
 
-//sort the edges in increasing order of the weights
-function sort(queue) {
-    queue.sort(function(a, b) {
-      return a.weight() - b.weight();
-    });
-  }
 const svg = document.querySelector("#graph-box");
 const text = document.querySelector("#graph-text-box");
 const graph = new Graph(0);
 const gv = new GraphVisualizer(graph, svg, text);
-const prim = new Prim(graph, gv);
-const kruskal= new Kruskal(graph,gv)
+const dfs = new Dfs(graph, gv);
 
