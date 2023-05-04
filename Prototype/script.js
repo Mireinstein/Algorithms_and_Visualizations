@@ -416,47 +416,72 @@ function Prim(graph, vis) {
 }
 
 function Kruskal(graph, vis){
-    this.graph = graph;
-    this.vis = vis;
-    this.V= graph.vertices;
-    this.E= graph.edges;
-    this.visited=[];
  
     //triggers prim's algorithms
     this.start=function(){
-     vis.muteAll();   
-     sort(this.E);
+     alert("Still working on it!")
     }
     
   
     //execute each step of prim's algorithm
   this.step = function () {
-   
+    alert("Still working on it!")
 	}
 
   this.animate=function(){
-    for(let edge of this.E){
-        let u=edge.vtx1;
-        let v=edge.vtx2;
-     if (((!this.visited.includes(u) && this.visited.includes(v)) || (this.visited.includes(u) && !this.visited.includes(v)))||
-     (!this.visited.includes(u) && !this.visited.includes(v))){
-        vis.unmuteEdge(edge)
-        vis.highlightEdge(edge)
-
-        if (!this.visited.includes(v)){
-            this.visited.push(v);
-           }
-    
-           else if (!this.visited.includes(u)){
-              this.visited.push(u);
-            
-           }
-     }
-     
-    }
- 
+    alert("Still working on it!")
  }
 }
+
+function randomize(){
+    let count=0;
+    while(count<10){
+       simulateClicks(svg);
+       count++;
+    }
+
+    let edgeCount=0;
+
+    while(edgeCount<20){
+      let vtx1=getRandomElement(gv.vertexElts)
+      console.log(vtx1.id)
+      let vtx2=getRandomElement(gv.vertexElts)
+      simulateClickAt(vtx1);
+      simulateClickAt(vtx2);
+      edgeCount++;
+    }
+   
+}
+
+function simulateClicks(svgElement) {
+    const bounds = svgElement.getBoundingClientRect();
+    const x = bounds.left + Math.random() * bounds.width;
+    const y = bounds.top + Math.random() * bounds.height;
+  
+    const clickEvent = new MouseEvent("click", {
+      clientX: x,
+      clientY: y
+    });
+  
+    svgElement.dispatchEvent(clickEvent);
+}
+
+function simulateClickAt(svgElement) {
+    const clickEvent = new MouseEvent("click", {
+      clientX: 0,
+      clientY: 0
+    });
+  
+    svgElement.dispatchEvent(clickEvent);
+}
+
+
+function getRandomElement(arr) {
+    const index = Math.floor(Math.random() * arr.length);
+    return arr[index];
+  }
+  
+  
 
 //sort the edges in increasing order of the weights
 function sort(queue) {

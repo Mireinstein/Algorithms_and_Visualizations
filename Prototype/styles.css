@@ -42,6 +42,7 @@ h2 {
   stroke-width: 3;
   transition: all 0.2s ease-in-out; /* Smooth hover effect */
   cursor: pointer;
+  z-index: 10;
   
 }
 
@@ -53,6 +54,7 @@ h2 {
 .edge {
   stroke: #555; /* Medium grey stroke color */
   stroke-width: 2px;
+  z-index: -10;
 }
 
 /* Style the muted edges */
@@ -77,7 +79,7 @@ h2 {
 
 /* Style the links */
 a{
-  color: #555; /* Medium grey text color */
+  color:rgb(179, 179, 239); /* Medium grey text color */
   text-decoration: none;
   transition: all 0.2s ease-in-out; /* Smooth hover effect */
  
@@ -91,4 +93,8 @@ a:hover {
  #buttons {
   display: block;
   margin: 20px auto;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  
 }
