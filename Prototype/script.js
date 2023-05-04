@@ -367,17 +367,14 @@ function Prim(graph, vis) {
         }
     }
     
-  
-    //execute each step of prim's algorithm
-  this.step = function () {
-   
-	}
-
   this.animate=function(){
     while(this.priorityQueue.length>0){
          sort(this.priorityQueue);
          
          let edge=this.priorityQueue.shift();
+
+         vis.highlightEdge(edge)
+         //pause for a second
 
          //extract the nodes
          let v=edge.vtx2;
@@ -388,7 +385,7 @@ function Prim(graph, vis) {
           this.mST.push(edge);
           this.visited.push(v);
          // vis.unmuteEdge(edge)
-          vis.highlightEdge(edge)
+          //vis.highlightEdge(edge)
           for (let vtx of v.neighbors) {
             if (!this.visited.includes(vtx)) {
              let neighborEdge=this.graph.getEdge(v,vtx);
@@ -401,13 +398,17 @@ function Prim(graph, vis) {
             this.mST.push(edge);
             this.visited.push(u);
            // vis.unmuteEdge(edge)
-            vis.highlightEdge(edge)
+           // vis.highlightEdge(edge)
             for (let vtx of u.neighbors) {
               if (!this.visited.includes(vtx)) {
                let neighborEdge=this.graph.getEdge(u,vtx);
                this.priorityQueue.push(neighborEdge);
               }
              }
+         }
+         else{
+            vis.unhighlightEdge(edge)
+             //pause for a second
          }
         }       
     
@@ -422,11 +423,6 @@ function Kruskal(graph, vis){
      alert("Still working on it!")
     }
     
-  
-    //execute each step of prim's algorithm
-  this.step = function () {
-    alert("Still working on it!")
-	}
 
   this.animate=function(){
     alert("Still working on it!")
