@@ -157,7 +157,7 @@ function GraphVisualizer (graph, svg, text) {
     });
 
 
-    //this.prim = null;
+    this.prim = null;
 
     // sets of highlighted/muted vertices and edges
     this.highVertices = [];
@@ -376,23 +376,18 @@ function Prim(graph, vis) {
   this.animate=function(){
     while(this.priorityQueue.length>0){
          sort(this.priorityQueue);
-         //debug
-        //  console.log("We have the following edges: ")
-        //  for(let curEdge of this.priorityQueue){
-        //  console.log(curEdge.weight());    
-        //  }
+         
          let edge=this.priorityQueue.shift();
-        //  console.log("We are chosing to highlight: "+edge.weight())
-         //stop debug
+
+         //extract the nodes
          let v=edge.vtx2;
-         if (!this.visited.includes(v)){
+         let u=edge.vtx1;
+
+         //check which node is not in the spanning tree
+         if (!this.visited.includes(v) && this.visited.includes(u) ){
           this.mST.push(edge);
           this.visited.push(v);
-          vis.unmuteEdge(edge)
-          
-          vis.highVertices.pop();
-          vis.highVertices.push(v);
-          vis.unmuteVertex(v);
+         // vis.unmuteEdge(edge)
           vis.highlightEdge(edge)
           for (let vtx of v.neighbors) {
             if (!this.visited.includes(vtx)) {
@@ -400,6 +395,19 @@ function Prim(graph, vis) {
              this.priorityQueue.push(neighborEdge);
             }
            }
+         }
+
+         else if (this.visited.includes(v) && !this.visited.includes(u) ){
+            this.mST.push(edge);
+            this.visited.push(u);
+           // vis.unmuteEdge(edge)
+            vis.highlightEdge(edge)
+            for (let vtx of u.neighbors) {
+              if (!this.visited.includes(vtx)) {
+               let neighborEdge=this.graph.getEdge(u,vtx);
+               this.priorityQueue.push(neighborEdge);
+              }
+             }
          }
         }       
     
@@ -416,8 +424,8 @@ function Kruskal(graph, vis){
  
     //triggers prim's algorithms
     this.start=function(){
+     vis.muteAll();   
      sort(this.E);
-    
     }
     
   
@@ -430,15 +438,21 @@ function Kruskal(graph, vis){
     for(let edge of this.E){
         let u=edge.vtx1;
         let v=edge.vtx2;
-     if (this.visited.includes(u) && this.visited.includes(v)){
-     
-     }
-     else{
+     if (((!this.visited.includes(u) && this.visited.includes(v)) || (this.visited.includes(u) && !this.visited.includes(v)))||
+     (!this.visited.includes(u) && !this.visited.includes(v))){
         vis.unmuteEdge(edge)
         vis.highlightEdge(edge)
-        // this.visited.push(u);
-        this.visited.push(v)
+
+        if (!this.visited.includes(v)){
+            this.visited.push(v);
+           }
+    
+           else if (!this.visited.includes(u)){
+              this.visited.push(u);
+            
+           }
      }
+     
     }
  
  }
