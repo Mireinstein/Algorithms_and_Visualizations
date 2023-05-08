@@ -328,98 +328,6 @@ function GraphVisualizer (graph, svg, text) {
         
 }
 
-function Prim(graph, vis) {
-    this.graph = graph;
-    this.vis = vis;
-    this.V= graph.vertices;
-    this.E= graph.edges;
-
-    this.startVertex=null;
-
-    //choose random starting vertix and put it in S
-    this.curVtx=null;
-    this.visited=[];
-
-    //priority queue to keep track of edges
-    this.priorityQueue=[];
-
-    //set of MST edges
-    this.mST=[]
- 
-    //triggers prim's algorithms
-    this.start=function(){
-      this.startVertex = vis.highVertices.pop();
-	
-      if (this.startVertex == null) {
-          vis.updateTextBox("Please select a starting vertex and start again.");
-          return;
-      }
-        
-      this.curVtx = this.startVertex;
-      this.visited.push(this.startVertex);
-  
-      this.vis.muteAll();
-      this.vis.unmuteVertex(this.startVertex);
-
-      //add all neighbours of current vertex to the priority queue
-      for (let vtx of this.curVtx.neighbors) {
-        let edge=this.graph.getEdge(this.curVtx,vtx)
-        this.priorityQueue.push(edge);
-        }
-    }
-    
-  this.animate=function(){
-    while(this.priorityQueue.length>0){
-         sort(this.priorityQueue);
-         
-         let edge=this.priorityQueue.shift();
-
-         vis.highlightEdge(edge)
-         sleep(500)
-         //pause for a second
-         
-
-         //extract the nodes
-         let v=edge.vtx2;
-         let u=edge.vtx1;
-
-         //check which node is not in the spanning tree
-         if (!this.visited.includes(v) && this.visited.includes(u) ){
-          this.mST.push(edge);
-          this.visited.push(v);
-         // vis.unmuteEdge(edge)
-          //vis.highlightEdge(edge)
-          for (let vtx of v.neighbors) {
-            if (!this.visited.includes(vtx)) {
-             let neighborEdge=this.graph.getEdge(v,vtx);
-             this.priorityQueue.push(neighborEdge);
-            }
-           }
-         }
-
-         else if (this.visited.includes(v) && !this.visited.includes(u) ){
-            this.mST.push(edge);
-            this.visited.push(u);
-           // vis.unmuteEdge(edge)
-           // vis.highlightEdge(edge)
-            for (let vtx of u.neighbors) {
-              if (!this.visited.includes(vtx)) {
-               let neighborEdge=this.graph.getEdge(u,vtx);
-               this.priorityQueue.push(neighborEdge);
-              }
-             }
-         }
-         else{
-            vis.unhighlightEdge(edge)
-             //pause for a second
-            sleep(500)
-         }
-        }       
-    
-    }
-
-}
-
 function Kruskal(graph, vis){
  
     //triggers prim's algorithms
@@ -496,6 +404,5 @@ const svg = document.querySelector("#graph-box");
 const text = document.querySelector("#graph-text-box");
 const graph = new Graph(0);
 const gv = new GraphVisualizer(graph, svg, text);
-const prim = new Prim(graph, gv);
 const kruskal= new Kruskal(graph,gv)
 

@@ -368,14 +368,14 @@ function Prim(graph, vis) {
         }
     }
     
-  this.animate=function(){
+  this.animate=async function(){
     while(this.priorityQueue.length>0){
          sort(this.priorityQueue);
          
          let edge=this.priorityQueue.shift();
 
          vis.highlightEdge(edge)
-         sleep(500)
+         await sleep(500)
          //pause for a second
          
 
@@ -412,25 +412,12 @@ function Prim(graph, vis) {
          else{
             vis.unhighlightEdge(edge)
              //pause for a second
-            sleep(500)
+            await sleep(500)
          }
         }       
     
     }
 
-}
-
-function Kruskal(graph, vis){
- 
-    //triggers prim's algorithms
-    this.start=function(){
-     alert("Still working on it!")
-    }
-    
-
-  this.animate=function(){
-    alert("Still working on it!")
- }
 }
 
 function randomize(){
@@ -497,5 +484,5 @@ const text = document.querySelector("#graph-text-box");
 const graph = new Graph(0);
 const gv = new GraphVisualizer(graph, svg, text);
 const prim = new Prim(graph, gv);
-const kruskal= new Kruskal(graph,gv)
+
 
