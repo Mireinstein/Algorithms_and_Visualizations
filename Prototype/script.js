@@ -374,7 +374,9 @@ function Prim(graph, vis) {
          let edge=this.priorityQueue.shift();
 
          vis.highlightEdge(edge)
+        // sleep(500)
          //pause for a second
+         
 
          //extract the nodes
          let v=edge.vtx2;
@@ -409,6 +411,7 @@ function Prim(graph, vis) {
          else{
             vis.unhighlightEdge(edge)
              //pause for a second
+            // sleep(500)
          }
         }       
     
