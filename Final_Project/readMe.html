@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Algorithmic Development</title>
+    <link rel="stylesheet" href="styles.css" type="text/css"/>
+  </head>
+  <body>
+    <div id="root">
+      <h1>The Minimum Spanning Tree Problem</h1>
+      <h2>Algorithmic Development</h2>
+      <p>
+        The Prim function implements Prim's algorithm for finding the minimum spanning tree (MST) of a weighted undirected graph. It takes as input a graph object and a visualization object, which is used to display the MST. 
+        The algorithm starts by choosing a random starting vertex and putting it in the set S. It then adds all the neighbors of the current vertex to a priority queue, sorted by their edge weights.
+         The algorithm then iteratively removes the edge with the minimum weight from the priority queue and checks if adding it to the MST would create a cycle. 
+         If not, it adds the edge to the MST and adds the adjacent vertex to the set S. 
+         The process continues until all vertices are in the set S. 
+      </p>
+      <p>The algorithm uses a variety of data structures including a priority queue, sets, and arrays to keep track of visited vertices, the current vertex, and the MST edges.
+        The visualization object is used to highlight edges and vertices as they are added to the MST.</p>
+      <p>
+        I also have two extra functions to help with the simulation of clicks inorder to create a random Graph.
+        simulateClicks() simulates a random click event on an SVG element by generating random coordinates within the bounds of the element and 
+        dispatching a click event with those coordinates using the dispatchEvent() method.
+       simulateClickAt() simulates a click event on an SVG element at the top-left corner of the element by dispatching 
+       a click event with clientX and clientY properties set to 0.
+      </p>
+      <p>Go <a href="index.html"> Home</a></p>
+    </div>
+  </body>
+</html>
