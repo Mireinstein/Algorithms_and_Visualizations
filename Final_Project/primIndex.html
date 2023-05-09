@@ -23,13 +23,16 @@
 
       <h2>Connection to the project</h2>
       <p>The goal of the project is to finds a subset of the edges that forms a tree that includes every vertex, where the total weight of all the edges in the tree is minimized.
-         We will use <a href="https://en.wikipedia.org/wiki/Kruskal%27s_algorithm" target="_blank">Kruskal</a> and <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm" target="_blank">Prim's algorithm</a> algorithm to visualize this. 
+         We will use <a href="https://en.wikipedia.org/wiki/Prim%27s_algorithm" target="_blank">Prim's algorithm</a> algorithm to visualize this. 
          The weights of the edges are based on the Euclidean distance between the two nodes</p>
 
-      <h2>How to Operate</h2>
+      <h2 id="focus">How to Operate</h2>
       <p>
-        Click on the grey canvas to add nodes; click two dots to add an edge between them( You can also click <strong>randomize</strong> to generate a random graph). Click Start then animate
-        to compute and visualize the minimum spanning tree.
+        <ol>
+          <li> Click on the grey canvas to add nodes; click two dots to add an edge between them( You can also click <strong>randomize</strong> to generate a random graph). </li>
+          <li> Click Start to start computing the minimum spanning tree</li>
+          <li> Click Animate to visualize the step by step process</li>
+        </ol>
         </p>
         <div class="canvas">
           <svg id="graph-box" xmlns="http://www.w3.org/2000/svg" width="600" height="600" stroke="black" stroke-width="3">
@@ -37,8 +40,8 @@
           </svg>
         </div>
     <div id="buttons">
-      <button onclick="randomize()">Randomize</button>
       <button onclick=location.reload()>Clear</button>
+      <button onclick="randomize()">Randomize</button>
       <button onclick="prim.start()">start</button> 
       <button onclick="prim.animate()">Animate</button>
     </div>

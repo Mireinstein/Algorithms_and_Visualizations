@@ -140,7 +140,7 @@ function Edge (vtx1, vtx2, id) {
           return -1;
       }
       return 0;
-      }
+    }
 
 }
 
@@ -158,7 +158,7 @@ function GraphVisualizer (graph, svg, text) {
     });
 
 
-    this.prim = null;
+    this.kruskal = null;
 
     // sets of highlighted/muted vertices and edges
     this.highVertices = [];
@@ -328,110 +328,102 @@ function GraphVisualizer (graph, svg, text) {
         
 }
 
-function Prim(graph, vis) {
+function Kruskal(graph, vis){
     this.graph = graph;
     this.vis = vis;
     this.V= graph.vertices;
     this.E= graph.edges;
 
+     // Initialize a disjoint set for each vertex
+   const disjointSets = new DisjointSet(this.V);
+
+
+   const MST = []; // Initialize an empty set to hold the MST
+
     this.startVertex=null;
 
-    //choose random starting vertix and put it in S
-    this.curVtx=null;
+    //the vertices in the final set
     this.visited=[];
 
     //priority queue to keep track of edges
     this.priorityQueue=[];
 
-    //set of MST edges
-    this.mST=[]
- 
-    //triggers prim's algorithms
-    this.start=function(){
-      this.startVertex = vis.highVertices.pop();
-	
-      if (this.startVertex == null) {
-          vis.updateTextBox("Please select a starting vertex and start again.");
-          return;
-      }
+     //triggers kruskal's algorithms
+     this.start=function(){
+        this.vis.muteAll();
         
-      this.curVtx = this.startVertex;
-      this.visited.push(this.startVertex);
   
-      this.vis.muteAll();
-      this.vis.unmuteVertex(this.startVertex);
+        //add all neighbours of current vertex to the priority queue
+        for (let edge of this.E) {
+          this.priorityQueue.push(edge);
+          }
+          sort(this.priorityQueue)
+      }
+    
 
-      //add all neighbours of current vertex to the priority queue
-      for (let vtx of this.curVtx.neighbors) {
-        let edge=this.graph.getEdge(this.curVtx,vtx)
-        this.priorityQueue.push(edge);
+  this.animate=async function(){
+
+    console.log("Started animation")
+    let numEdges = 0;
+    for (const edge of this.priorityQueue) {
+        console.log(numEdges+" edges")
+        let target=edge.vtx2;
+        let source=edge.vtx1;
+      // If the edge connects two vertices in different disjoint sets, add it to the MST
+      console.log(disjointSets.findSet(source))
+      if (disjointSets.findSet(source) !== disjointSets.findSet(target)) {
+        MST.push(edge);
+        vis.unmuteEdge(edge)
+        vis.highlightEdge(edge)
+        disjointSets.union(source, target);
+        numEdges++;
+  
+        // Stop when the MST has V-1 edges
+        if (numEdges === this.priorityQueue.length - 1) {
+          break;
         }
+      }
     }
-    
-  this.animate=function(){
-    while(this.priorityQueue.length>0){
-         sort(this.priorityQueue);
-         
-         let edge=this.priorityQueue.shift();
-
-         vis.highlightEdge(edge)
-         sleep(500)
-         //pause for a second
-         
-
-         //extract the nodes
-         let v=edge.vtx2;
-         let u=edge.vtx1;
-
-         //check which node is not in the spanning tree
-         if (!this.visited.includes(v) && this.visited.includes(u) ){
-          this.mST.push(edge);
-          this.visited.push(v);
-         // vis.unmuteEdge(edge)
-          //vis.highlightEdge(edge)
-          for (let vtx of v.neighbors) {
-            if (!this.visited.includes(vtx)) {
-             let neighborEdge=this.graph.getEdge(v,vtx);
-             this.priorityQueue.push(neighborEdge);
-            }
-           }
-         }
-
-         else if (this.visited.includes(v) && !this.visited.includes(u) ){
-            this.mST.push(edge);
-            this.visited.push(u);
-           // vis.unmuteEdge(edge)
-           // vis.highlightEdge(edge)
-            for (let vtx of u.neighbors) {
-              if (!this.visited.includes(vtx)) {
-               let neighborEdge=this.graph.getEdge(u,vtx);
-               this.priorityQueue.push(neighborEdge);
-              }
-             }
-         }
-         else{
-            vis.unhighlightEdge(edge)
-             //pause for a second
-            sleep(500)
-         }
-        }       
-    
-    }
-
-}
-
-function Kruskal(graph, vis){
- 
-    //triggers prim's algorithms
-    this.start=function(){
-     alert("Still working on it!")
-    }
-    
-
-  this.animate=function(){
-    alert("Still working on it!")
  }
 }
+
+  // Define a DisjointSet class to implement the disjoint set data structure
+  class DisjointSet {
+    constructor(elements) {
+      // Initialize each element as a separate set
+      this.sets = new Map(elements.map((elem) => [elem, new Set([elem])]));
+    }
+  
+    // Find the set that an element belongs to
+    findSet(elem) {
+      for (let [key, set] of this.sets) {
+        if (set.has(elem)) {
+          return key;
+        }
+      }
+    }
+  
+    // Union two sets together
+    union(elem1, elem2) {
+      let  set1 = this.sets.get(this.findSet(elem1));
+      let set2 = this.sets.get(this.findSet(elem2));
+  
+      // Merge the smaller set into the larger set to improve performance
+      if (set1.size > set2.size) {
+        for (let elem of set2) {
+          set1.add(elem);
+          this.sets.set(elem, set1);
+        }
+        this.sets.delete(elem2);
+      } else {
+        for (let elem of set1) {
+          set2.add(elem);
+          this.sets.set(elem, set2);
+        }
+        this.sets.delete(elem1);
+      }
+    }
+  }
 
 function randomize(){
     let count=0;
@@ -492,10 +484,10 @@ function sort(queue) {
       return a.weight() - b.weight();
     });
   }
+
 const svg = document.querySelector("#graph-box");
 const text = document.querySelector("#graph-text-box");
 const graph = new Graph(0);
 const gv = new GraphVisualizer(graph, svg, text);
-const prim = new Prim(graph, gv);
 const kruskal= new Kruskal(graph,gv)
 
